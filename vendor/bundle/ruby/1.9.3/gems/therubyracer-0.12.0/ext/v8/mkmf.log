@@ -1,0 +1,55 @@
+have_library: checking for main() in -lpthread... -------------------- yes
+
+"gcc -o conftest -I/usr/include/ruby-1.9.3/x86_64-linux -I/usr/include/ruby-1.9.3/ruby/backward -I/usr/include/ruby-1.9.3 -I.    -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4 -mtune=generic -fno-strict-aliasing -fPIC conftest.c  -L. -L/usr/lib64 -Wl,-R/usr/lib64 -L. -rdynamic -Wl,-export-dynamic  -m64   -Wl,-R -Wl,/usr/lib64 -L/usr/lib64 -lruby  -lpthread -lrt -ldl -lcrypt -lm   -lc"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main(int argc, char **argv)
+4: {
+5:   return 0;
+6: }
+/* end */
+
+"gcc -o conftest -I/usr/include/ruby-1.9.3/x86_64-linux -I/usr/include/ruby-1.9.3/ruby/backward -I/usr/include/ruby-1.9.3 -I.    -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4 -mtune=generic -fno-strict-aliasing -fPIC conftest.c  -L. -L/usr/lib64 -Wl,-R/usr/lib64 -L. -rdynamic -Wl,-export-dynamic  -m64   -Wl,-R -Wl,/usr/lib64 -L/usr/lib64 -lruby -lpthread  -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: In function ‘t’:
+conftest.c:4: error: ‘main’ undeclared (first use in this function)
+conftest.c:4: error: (Each undeclared identifier is reported only once
+conftest.c:4: error: for each function it appears in.)
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: int t() { void ((*volatile p)()); p = (void ((*)()))main; return 0; }
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+/* end */
+
+"gcc -o conftest -I/usr/include/ruby-1.9.3/x86_64-linux -I/usr/include/ruby-1.9.3/ruby/backward -I/usr/include/ruby-1.9.3 -I.    -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4 -mtune=generic -fno-strict-aliasing -fPIC conftest.c  -L. -L/usr/lib64 -Wl,-R/usr/lib64 -L. -rdynamic -Wl,-export-dynamic  -m64   -Wl,-R -Wl,/usr/lib64 -L/usr/lib64 -lruby -lpthread  -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: In function ‘t’:
+conftest.c:4: warning: implicit declaration of function ‘main’
+checked program was:
+/* begin */
+ 1: #include "ruby.h"
+ 2: 
+ 3: /*top*/
+ 4: int t() { main(); return 0; }
+ 5: int main(int argc, char **argv)
+ 6: {
+ 7:   if (argc > 1000000) {
+ 8:     printf("%p", &t);
+ 9:   }
+10: 
+11:   return 0;
+12: }
+/* end */
+
+--------------------
+

@@ -1,0 +1,59 @@
+#mapping
+  #animal
+    - if @ra.nil?
+      This animal does not exist, and not just existentially.
+    - else
+      #nickname
+        = @ra.nickname
+      #animal_id
+        = "ID: #{@ra.animal_id}"
+      #frequency
+        = "Freq: #{@ra.frequency}"
+      #microchip
+        = "Chip: #{@ra.microchip}"
+      -#
+        #animation
+          %button Start
+          %div{:id => "speed"}
+  #hitlist
+    - if @rts.empty?
+      No telemetry found.
+    - else
+      - @rts.select { |rt| !rt.location_of_animal_N.zero? && !rt.location_of_animal_E.zero? }.each do |rt|
+        %div{:id => "rtdate#{rt.id}"}
+          = render :partial => 'rtdate', :locals => { :rt => rt }
+
+  #map
+    #map_canvas
+      
+:javascript
+  $("div[id^='rtdetail']").css('display', 'none');
+  $(function() {
+      $("button").button();
+      $("button").click(function() {
+          var re = /Start/;
+          if(re.test($(this).html())) {
+              TMap.stopAnimation();
+          } else {
+              TMap.startAnimation();
+          }
+          $(this).html("<span class=\"ui-button-text\">" +
+              (re.test($(this).html()) ? "Stop" : "Start") +
+              "</span>");
+      });
+  });
+  $(function() {
+      $("#speed").slider({min: 1, max: 10});
+  });
+  var data = {
+      id: #{@ra.nil? ? 0 : @ra.id}
+  }
+  $.ajax({
+      url: TMap.basicPathUrl,
+      type: "POST",
+      data: data,
+      dataType: 'json',
+      success: function(json) {
+          TMap.createAnimalPath(json);
+      }
+  });

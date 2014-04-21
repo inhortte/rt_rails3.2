@@ -1,0 +1,16 @@
+!!! XML
+!!!
+%html
+  %head
+    %title Animal!
+    = javascript_tag "RT_ROOT = '#{Rails.root.to_s + "/public"}'"
+    = render 'layouts/head'
+  %body
+    .container
+      %div{:id => "menu", :class => "span-20 round"}
+        - unless request.path =~ %r{triangulation}
+          = render 'layouts/menu'
+      %br.clear
+      %br.clear
+      %div{:id => "content", :class => "span-24 round"}
+        = yield

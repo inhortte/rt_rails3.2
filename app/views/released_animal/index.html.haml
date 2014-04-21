@@ -1,0 +1,50 @@
+%h3 Animals
+%br.clear
+= link_to "Animal Report", animals_reports_path, :remote => true
+%br.clear
+%table{:border => 1}
+  %tr
+    %td &nbsp;
+    %td &nbsp;
+    %td Name
+    %td ID
+    %td Freq
+    %td Sex
+    %td B Date
+    %td R Date
+    %td Microchip
+    %td Enc Type
+    %td N
+    %td E
+    %td Site
+    %td &nbsp;
+  - @ras.each_index do |i|
+    %tr{:class => "#{i % 2 == 0 ? 'paarisarv' : 'odd'}"}
+      %td
+        - if @ras[i].radiotrackings.count > 0
+          %a{:href => "/mapping/#{@ras[i].id}"} map
+        - else
+          &nbsp;
+      %td
+        = link_to "report", general_report_report_path(@ras[i].id), :remote => true
+      %td
+        %a{:href => "/released_animal/#{@ras[i].id}"}
+          - if @ras[i].nickname.empty?
+            \...
+          - else
+            = @ras[i].nickname
+      %td
+        %a{:href => "/released_animal/#{@ras[i].id}"}
+          = @ras[i].animal_id
+      %td= @ras[i].frequency
+      %td= @ras[i].sex[0].chr
+      %td= @ras[i].birthdate.strftime(STRFDATE)
+      %td= @ras[i].release_date.strftime(STRFDATE)
+      %td= @ras[i].microchip
+      %td= @ras[i].enclosure_type
+      %td= @ras[i].release_location_N
+      %td= @ras[i].release_location_E
+      %td= @ras[i].release_site
+      %td
+        %a{:href => "#", :id => "radel#{@ras[i].id}"}
+          %strong X
